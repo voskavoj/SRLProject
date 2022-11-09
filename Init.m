@@ -10,3 +10,5 @@ AerodynamicSurfaces;
 Initial;
 Trim;
 tuning;
+
+system_is_initialized = true;
