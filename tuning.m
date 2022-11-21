@@ -3,6 +3,7 @@
 % Roll Control
 RollCtrl.P = 1.5;
 RollCtrl.I = 0.15;
+RollCtrl.D = 0;
 RollCtrl.damping = 0.2;
 RollCtrl.saturation = 50;
 
@@ -14,12 +15,16 @@ HeadingCtrl.rate = 0.05;
 
 %% LONGITUDINAL CONTROL
 % Pitch Control
-PitchCtrl.P = 2;
-PitchCtrl.I = 0.1;
-PitchCtrl.D = 0.1;
+PitchCtrl.errPID.P = 2;
+PitchCtrl.errPID.I = 0.1;
+PitchCtrl.errPID.D = 0;
+PitchCtrl.accPID.P = 3;
+PitchCtrl.accPID.I = 1;
+PitchCtrl.filter = 5;
+PitchCtrl.damping = 0.5;
 PitchCtrl.saturation.upper = 10;
 PitchCtrl.saturation.lower = -15;
-PitchCtrl.damping = 0.2;
+
 
 % Altitude Control
 AltCtrl.P = 0.009;
