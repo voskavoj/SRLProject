@@ -25,13 +25,17 @@ PitchCtrl.damping = 0.5;
 PitchCtrl.saturation.upper = 10;
 PitchCtrl.saturation.lower = -15;
 
-
 % Altitude Control
-AltCtrl.P = 0.009;
-AltCtrl.I = 0.000011;
-AltCtrl.D = 0.0002;
+AltCtrl.errPID.P = 0.009;
+AltCtrl.errPID.I = 0.000011;
+AltCtrl.errPID.D = 0;
+AltCtrl.accPID.P = 1;
+AltCtrl.accPID.I = 2;
+AltCtrl.accPID.D = 0.05;
 AltCtrl.rate.rising = 3;
 AltCtrl.rate.falling = -10;
+AltCtrl.filter.fc = 20;
+AltCtrl.filter.gain = 0.2;
 
 % Airspeed Control
 AirspdCtrl.P = 100;
