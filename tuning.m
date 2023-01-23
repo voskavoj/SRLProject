@@ -15,22 +15,19 @@ HeadingCtrl.rate = 0.05;
 
 %% LONGITUDINAL CONTROL
 % Pitch Control
-PitchCtrl.P = 2;
-PitchCtrl.I = 0.1;
-PitchCtrl.accPID.P = 3;
-PitchCtrl.accPID.I = 1;
-PitchCtrl.filter = 5;
+PitchCtrl.P = 4;
+PitchCtrl.I = 0.2;
 PitchCtrl.damping = 0.5;
 PitchCtrl.saturation.upper = 10;
 PitchCtrl.saturation.lower = -15;
 
 % Altitude Control
-AltCtrl.errPID.P = 1;
-AltCtrl.errPID.I = 0.1;
-AltCtrl.errPID.D = 0;
-AltCtrl.accPID.P = 1;
-AltCtrl.accPID.I = 2;
-AltCtrl.accPID.D = 0.05;
+AltCtrl.errPID.P = 0.5;
+AltCtrl.errPID.I = 0.005;
+AltCtrl.errPID.D = 0.0;
+AltCtrl.accPID.P = 0.06;
+AltCtrl.accPID.I = 0.005;
+AltCtrl.accPID.D = 0.01;
 AltCtrl.rate.rising = 3;
 AltCtrl.rate.falling = -10;
 AltCtrl.filter.fc = 20;
