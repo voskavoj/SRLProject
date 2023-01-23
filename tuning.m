@@ -5,12 +5,18 @@ RollCtrl.P = 1.5;
 RollCtrl.I = 0.15;
 RollCtrl.D = 0;
 RollCtrl.damping = 0.2;
-RollCtrl.saturation = 50;
+RollCtrl.saturation = 50;Slip
+
+% Slip damper
+SlipDamp.PID.P = 10;
+SlipDamp.PID.I = 1;
+SlipDamp.PID.saturation = 5;
+SlipDamp.damping = 0.01;
 
 % Heading control
-HeadingCtrl.errPID.P = 200/30;
-HeadingCtrl.errPID.I = 145/30;
-HeadingCtrl.errPID.D = 69/30;
+HeadingCtrl.errPID.P = 6.7;
+HeadingCtrl.errPID.I = 4.8;
+HeadingCtrl.errPID.D = 2.3;
 HeadingCtrl.accPID.P = 3;
 HeadingCtrl.accPID.I = 0;
 HeadingCtrl.accPID.D = 0.04;
