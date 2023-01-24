@@ -1,11 +1,11 @@
 %% LATERAL CONTROL
-
+clearvars RollCtrl SlipDamp HeadingCtrl PitchCtrl AltCtrl AirspdCtrl
 % Roll Control
 RollCtrl.P = 1.5;
 RollCtrl.I = 0.15;
 RollCtrl.D = 0;
 RollCtrl.damping = 0.2;
-RollCtrl.saturation = 50;Slip
+RollCtrl.saturation = 50;
 
 % Slip damper
 SlipDamp.PID.P = 10;
@@ -35,10 +35,12 @@ PitchCtrl.saturation.lower = -15;
 AltCtrl.errPID.P = 0.5;
 AltCtrl.errPID.I = 0.005;
 AltCtrl.errPID.D = 0.0;
-
+AltCtrl.accPID.P = 0.06;
+AltCtrl.accPID.I = 0.005;
+AltCtrl.accPID.D = 0.01;
 AltCtrl.rate.rising = 3;
 AltCtrl.rate.falling = -10;
-
+AltCtrl.filter.fc = 20;
 
 % Airspeed Control
 AirspdCtrl.P = 100;
