@@ -1,5 +1,5 @@
 %% LATERAL CONTROL
-clearvars RollCtrl SlipDamp HeadingCtrl PitchCtrl AltCtrl AirspdCtrl
+clearvars RollCtrl SlipDamp HeadingCtrl PitchCtrl AltCtrl AirspdCtrl var
 % Roll Control
 RollCtrl.P = 1.5;
 RollCtrl.I = 0.15;
