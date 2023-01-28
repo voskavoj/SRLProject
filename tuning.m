@@ -46,7 +46,7 @@ AltCtrl.filter.fc = 20;
 AirspdCtrl.P = 100;
 AirspdCtrl.I = 10;
 AirspdCtrl.double_integration = 0;
-AirspdCtrl.saturation.upper = 40;
+AirspdCtrl.saturation.upper = 30;
 AirspdCtrl.saturation.lower = -30;
 
 fprintf("Control coefficients loaded.\n")

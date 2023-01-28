@@ -17,16 +17,15 @@ airspeed_req = prev_airspeed_req;
 pitch_req = prev_pitch_req;
 manual_pitch_ctrl = prev_manual_pitch_ctrl;
 pos_x = NED_act(1);
-pox_y = NED_act(2);
+pos_y = NED_act(2);
 
 if (stage == 0)
     altitude_req = 500;
-    heading_req = 0.0;
+    heading_req = 0;
     airspeed_req = 70;
-    pitch_req = 0.0;
-    manual_pitch_ctrl = 0.0;
-    next_stage = 1;
-    next_stage = 3; % fixme landing model
+    pitch_req = 0;
+    manual_pitch_ctrl = 0;
+    next_stage = 3; % go straight to climb, because model cannot start on the ground => the actual order is 3-8 -> 1-2 -> 3
     cache = 0;
     return
 end
@@ -37,17 +36,17 @@ if stage >= 1 && stage < 2
     altitude_req = 0;
     heading_req = 0.0;
     airspeed_req = 42 * 1.3;
-
-    if airspeed_req >= (42 * 1.3) - 2
+    if airspeed_act >= (42 * 1.3) - 2
         stage = 2;
     end
 end
 
 %% 2: Takeoff
 if stage >= 2 && stage < 3
+    manual_pitch_ctrl = 0;
     heading_req = 0.0;
     airspeed_req = 60;
-    altitude_req = ramp_progressive(0.1, prev_altitude_req, time_step, 0.5);
+    altitude_req = ramp(0.5, prev_altitude_req, time_step); % clear runway
     if altitude_act >= 10
         stage = 3;
     end
@@ -75,8 +74,8 @@ if stage >= 4 && stage < 5
         if is_within_tolerance(pos_x, -15000, 1) % 15 km south of runway
             stage = 4.2;
         end
-    elseif stage == 4.2 % second turn
-        heading_req = wrapToPi(ramp_limited(deg2rad(1), prev_heading_req, time_step, 8000));
+    elseif stage == 4.2 % second turn (slightly off from the first one to demonstrate ability to correct Y-position
+        heading_req = wrapToPi(ramp_limited(deg2rad(0.99), prev_heading_req, time_step, 8000));
         if heading_req >= deg2rad(0)
             heading_req = 0;
             stage = 5;
@@ -87,7 +86,16 @@ end
 %% 5: Approach
 if (stage >= 5 && stage < 6)
     heading_req = 0;
-    %todo
+    
+    if stage == 5 && abs(pos_y) >= 5
+        % simple P controller for heading to get to proper position (<5 m from centerline)
+        heading_req = -1 * pos_y * 0.002; % to correct 100 m of difference in 0.5 km (heading 6 deg)
+
+        if abs(pos_y) <= 1.5 && abs(heading_act) <= deg2rad(1.5)
+            stage = 5.1;
+            heading_req = 0;
+        end
+    end
 
     if pos_x >= -1 * glide_slope_offset(3, altitude_req)
         stage = 6;
@@ -109,6 +117,7 @@ end
 
 %% 7: Flare
 if (stage >= 7 && stage < 8)
+    altitude_req = altitude_act;
     if stage == 7 % init
         manual_pitch_ctrl = 1;
         prev_pitch_req = pitch_act;
@@ -140,6 +149,12 @@ if (stage >= 8 && stage < 9)
     manual_pitch_ctrl = 1;
     pitch_req = ramp_limited(-deg2rad(1), prev_pitch_req, time_step, 0);
     airspeed_req = 0;
+    altitude_req = 0;
+
+    if airspeed_act <= 15 % go again
+        manual_pitch_ctrl = 0;
+        stage = 1;
+    end
 end
 
 %%
@@ -158,10 +173,6 @@ function req = ramp_limited(rate, prev_req, time_step, limit)
     else
         req = max(req, limit);
     end
-end
-
-function req = ramp_progressive(rate, prev_req, time_step, progress)
-    req = prev_req + time_step * (rate + progress/time_step);
 end
 
 function vertical_speed = glide_slope_rate(angle, airspeed)
